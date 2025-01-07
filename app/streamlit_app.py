@@ -6,18 +6,20 @@
 
 # -----------------------------------------------
 # START STREAMLIT IN SNOWFLAKE & IMPORT LIBRARIES
-# -----------------------------------------------
-
+# ----------------------------------------------
 import streamlit as st
 import pandas as pd
 import streamlit as st
 from snowflake.snowpark import Session
+from snowflake.connector.errors import DatabaseError
+import time
+
 # Configure page layout settings, set app title and description
 st.set_page_config(layout="wide")
 
 # Snowflake connection parameters
 connection_parameters = {
-    "account": "qt58270.us-central1.gcp.snowflakecomputing.com",  # e.g., "xy12345.us-east-1"
+    "account": "gq81837-sales-eng-demo",  # e.g., "xy12345.us-east-1"
     "user": "doug.jauregui@fivetran.com",
     "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
     "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
@@ -27,13 +29,16 @@ connection_parameters = {
 }
 
 # Create Snowflake session
-def create_session():
-    try:
-        session = Session.builder.configs(connection_parameters).create()
-        return session
-    except Exception as e:
-        st.error(f"Failed to connect to Snowflake: {str(e)}")
-        return None
+def create_session(max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            session = Session.builder.configs(connection_parameters).create()
+            return session
+        except DatabaseError as e:
+            if attempt == max_retries - 1:
+                st.error(f"Failed to connect after {max_retries} attempts: {str(e)}")
+                return None
+            time.sleep(2 ** attempt)  # Exponential backoff
 
 # Initialize session
 session = create_session()
@@ -63,7 +68,7 @@ model = None
 # -----------------------------------------------
 
 # Configure page layout settings, set app title and description
-st.set_page_config(layout="wide")
+# st.set_page_config(layout="wide")
 st.title(":rocket: Superior Support Engineer Assistant :rocket:")
 st.caption (" 0.9.16.24")
 
