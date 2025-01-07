@@ -12,6 +12,8 @@ import streamlit as st
 import pandas as pd
 import streamlit as st
 from snowflake.snowpark import Session
+# Configure page layout settings, set app title and description
+st.set_page_config(layout="wide")
 
 # Snowflake connection parameters
 connection_parameters = {
