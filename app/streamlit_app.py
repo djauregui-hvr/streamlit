@@ -66,6 +66,8 @@ model = None
 # -----------------------------------------------
 # UI CONFIGURATION
 # -----------------------------------------------
+def sanitize_sql_string(s):
+    return s.replace("'", "''")
 
 # Configure page layout settings, set app title and description
 # st.set_page_config(layout="wide")
@@ -257,7 +259,7 @@ conversation_state = st.session_state['conversation_state']  # Access from sessi
 if st.session_state['use_dataset_as_context']:
     # SQL and caption logic for when the checkbox is checked
     st.caption("Please note that :green[**_I am_**] using your Fivetran dataset as context. All models are very creative and can make mistakes. Consider checking important information before looking in height for your manual boring search.")
-    
+    escaped_question = sanitize_sql_string(question)
     sql = f"""
   select snowflake.cortex.complete(
         '{model}', 
@@ -269,16 +271,16 @@ if st.session_state['use_dataset_as_context']:
                     SELECT 
                         VECTOR_TEXT,
                         vector_l2_distance(
-                            SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{question}'), 
+                            SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{escaped_question}'), 
                             HEIGHT_EMBEDDING
                         ) as distance,
                         ROW_NUMBER() OVER (ORDER BY vector_l2_distance(
-                            SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{question}'), 
+                            SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{escaped_question}'), 
                             HEIGHT_EMBEDDING
                         )) as rank
                     FROM DOUG_JAUREGUI.HEIGHT.single_string_height_review_vector
                     WHERE vector_l2_distance(
-                        SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{question}'), 
+                        SNOWFLAKE.CORTEX.EMBED_TEXT_1024('e5-large-v2', '{escaped_question}'), 
                         HEIGHT_EMBEDDING
                     ) < {search_threshold}
                 )
@@ -287,7 +289,7 @@ if st.session_state['use_dataset_as_context']:
                 WHERE rank <= {num_tickets}
             ), 
             'Question: ', 
-            '{question}', 
+            '{escaped_question}', 
             'Instructions: ',
             '1. Focus on the most relevant ticket information first.',
             '2. If multiple tickets are provided, synthesize the information coherently.',
@@ -304,7 +306,7 @@ else:
     # SQL and caption logic for when the checkbox is unchecked
     st.caption("Please note that :red[**_I am NOT_**] using your Fivetran dataset as context. All models are very creative and can make mistakes. Consider checking important information before responding to customers or reaching out to fellow SEs.")
     sql = f"""
-    select snowflake.cortex.complete('{model}', '{question}') as response;
+    select snowflake.cortex.complete('{model}', '{escaped_question}') as response;
     """
 
 # Handle SQL execution and response retrieval errors to ensure the application remains robust and user-friendly
