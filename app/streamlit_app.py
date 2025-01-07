@@ -17,7 +17,7 @@ from snowflake.snowpark import Session
 connection_parameters = {
     "account": "qt58270.us-central1.gcp.snowflakecomputing.com",  # e.g., "xy12345.us-east-1"
     "user": "doug.jauregui@fivetran.com",
-    "password": "Jaur0131!@",  # Consider using st.secrets for sensitive data
+    "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
     "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
     "warehouse": "DEFAULT",
     "database": "DOUG_JAUREGUI",
