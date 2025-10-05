@@ -9,7 +9,7 @@
 # ----------------------------------------------
 import streamlit as st
 import pandas as pd
-import streamlit as st
+import streamlit as stss
 from snowflake.snowpark import Session
 from snowflake.connector.errors import DatabaseError
 import time
@@ -20,7 +20,7 @@ escaped_question = ""
 
 # Snowflake connection parameters
 connection_parameters = {
-    "account": "a3209653506471-sales-eng-demo",  # e.g., "xy12345.us-east-1"
+    "account": "a3209653506471-sales-eng-demo",  #1 e.g., "xy12345.us-east-1"
     "user": "doug.jauregui@fivetran.com",
     "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
     "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
