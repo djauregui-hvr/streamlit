@@ -20,7 +20,7 @@ escaped_question = ""
 
 # Snowflake connection parameters
 connection_parameters = {
-    "account": "a3209653506471-sales-eng-demo",  #12 e.g., "xy12345.us-east-1"
+    "account": "a3209653506471-sales-eng-demo",  #123s e.g., "xy12345.us-east-1"
     "user": "doug.jauregui@fivetran.com",
     "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
     "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
@@ -30,7 +30,7 @@ connection_parameters = {
 }
 
 # Create Snowflake session
-def create_session(max_retries=3):
+def create_session(max_retries=4):
     for attempt in range(max_retries):
         try:
             session = Session.builder.configs(connection_parameters).create()
