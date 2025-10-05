@@ -20,13 +20,13 @@ escaped_question = ""
 
 # Snowflake connection parameters
 connection_parameters = {
-    "account": "...",  # e.g., "xy12345.us-east-1"
-    "user": "...",
-    "password": "...",  #s Consider using st.secrets for sensitive data
-    "role": "...",  # e.g., "ACCOUNTADMIN"
-    "warehouse": "....",
-    "database": "....",
-    "schema": "....."
+    "account": "gq81837-sales-eng-demo",  # e.g., "xy12345.us-east-1"
+    "user": "doug.jauregui@fivetran.com",
+    "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
+    "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
+    "warehouse": "DEFAULT",
+    "database": "DOUG_JAUREGUI",
+    "schema": "HEIGHT"
 }
 
 # Create Snowflake session
@@ -153,14 +153,11 @@ if question:
 # Each model has different capabilities and performance characteristics, affecting how user queries are processed
 model = st.sidebar.selectbox('Select a Snowflake Cortex model:', (
     'llama3.2-3b',
-    'snowflake-arctic',
-    'llama3.1-70b',
-    'llama3.1-405b',
+    'openai-gpt-oss-120b', 
     'llama3.3-70b',
-    'claude-3-5-sonnet',
-    'mistral-large',
-    'mixtral-8x7b',
-    'llama3.1-8b'
+    'claude-sonnet-4-5',
+    'open-gpt-5',
+    'llama3.2-8b'
 ))
 
 # Updates the 'use_dataset_as_context' in session state based on user interaction with the checkbox
