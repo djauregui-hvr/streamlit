@@ -20,7 +20,7 @@ escaped_question = ""
 
 # Snowflake connection parameters
 connection_parameters = {
-    "account": "a3209653506471-sales-eng-demo",  #1 e.g., "xy12345.us-east-1"
+    "account": "a3209653506471-sales-eng-demo",  #12 e.g., "xy12345.us-east-1"
     "user": "doug.jauregui@fivetran.com",
     "password": "Jaur0131!@",  #s Consider using st.secrets for sensitive data
     "role": "SALES_ENGINEERING",  # e.g., "ACCOUNTADMIN"
